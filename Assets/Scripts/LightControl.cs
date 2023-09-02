@@ -22,7 +22,7 @@ public class LightControl : MonoBehaviour
             isLightOn = true;
         } else
         {
-            isLightOn= false;
+            isLightOn = false;
         }
 
         if(isLightOn)

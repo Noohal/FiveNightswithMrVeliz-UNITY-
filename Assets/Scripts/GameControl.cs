@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class GameControl : MonoBehaviour
 {
-    // -- Power Usage
+    // --- Map Points ---
+    public Transform[] bonnieMovementPoints;
+
+    // --- Power Usage ---
     public IntVariable powerLevel;
     public float lastTimePowerLost = 0;
 
-    const float powerLossRate = 1f;
+    const float powerLossRate = 1000f;
 
     // --- Clock ---
     public IntVariable currentTime;
@@ -16,17 +19,24 @@ public class GameControl : MonoBehaviour
 
     const float hourDuration = 10f;
 
+    // --- Villain Control ---
+    public GameObject bonniePrefab;
+    public BoolVariable bonnieMoving;
+
     void Start()
     {
         powerLevel.value = 100;
         currentTime.value = 0;
+
+        Instantiate(bonniePrefab);
+        bonniePrefab.GetComponent<BonnieAi>().SetMovementPoints(bonnieMovementPoints);
     }
 
     // Update is called once per frame
     void Update()
     {
         float now = Time.time;
-        print(now);
+        //print(now);
         if(now - lastTime >= hourDuration)
         {
             currentTime.value++;
@@ -39,7 +49,7 @@ public class GameControl : MonoBehaviour
             powerLevel.value--;
             if(powerLevel.value <= 0)
                 powerLevel.value = 0;
-            print(powerLevel.value);
+            //print(powerLevel.value);
             lastTimePowerLost = now;
         }
     }
