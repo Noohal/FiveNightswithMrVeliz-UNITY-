@@ -1,32 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class BonnieAi : MonoBehaviour
+public class ChicaAI : MonoBehaviour
 {
     public IntVariable currentTime;
+    public int lastHourTime = 0;
 
     public Transform body;
     public Transform[] movementPoints;
-    //public NavMeshAgent agent;
-
-    /**
-     * AI Calculations
-     * Every movement interval, there is a movement opportunity.
-     * Roll 1d20. Compare to current AI level.
-     * If AI is >= random roll, then animatronic can move.
-     */ 
 
     public float lastMovementTime = 0;
-    public const float MOVEMENT_INTERVAL = 5;
+    public const float MOVEMENT_INTERVAL = 5f;
+
     public BoolVariable isMoving;
-    public BoolVariable isLeftDoorClosed;
+    public BoolVariable isRightDoorClosed;
 
-    public int[] startingAILevels = { 0, 3, 0, 2, 5, 10 };
+    public int[] startingAILevels = { };
     public int currentAILevel;
-
-    public int lastHourTime = 0;
 
     public int currentLocation = 0;
     public int lastLocation = 0;
@@ -34,7 +25,6 @@ public class BonnieAi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Transform>();
         currentAILevel = 10;
     }
@@ -43,13 +33,12 @@ public class BonnieAi : MonoBehaviour
     void Update()
     {
         if (movementPoints == null || movementPoints.Length == 0)
-            print("BONNIE MOVEMENT POINTS");
+            print("CHICA MOVEMENT POINTS");
 
         if(currentTime.value != lastHourTime)
         {
-            switch(currentTime.value)
+            switch (currentTime.value)
             {
-                case 2:
                 case 3:
                 case 4:
                     currentAILevel += 1;
@@ -81,118 +70,106 @@ public class BonnieAi : MonoBehaviour
         currentLocation = CalculateNewDestination(lastLocation);
 
         yield return new WaitForSeconds(3f);
-        
+
         body.transform.position = movementPoints[currentLocation].transform.position;
         isMoving.value = false;
-        
-        print("END MOVE");
-
-        //agent.SetDestination(movementPoints[currentLocation].transform.position);
     }
 
-    int CalculateNewDestination(int lastLocation)
+    int CalculateNewDestination(int _lastLocation)
     {
         int newDest = 0;
-
-        /**
-         * lastLoc --> 1, 2
-         * 0 Cam 8   --> Cam 7, Cam 9
-         * 1 Cam 7   --> Cam 1b, Cam 9
-         * 2 Cam 9   --> Cam 1b, Cam 7
-         * 3 Cam 1b  --> Cam 1a, Cam 3
-         * 4 Cam 1a  --> Cam 3, Door
-         * 5 Cam 3   --> Cam 1a, Door
-         * 6 Door    --> Cam 9
-         */
+        int chance = 0;
 
         /**
          * 0 - Cam 8
-         * 1 - Cam 7
-         * 2 - Cam 9
-         * 3 - Cam 1b
-         * 4 - Cam 1a
-         * 5 - Cam 3
+         * 1 - UM
+         * 2 - UB
+         * 3 - Cam 6
+         * 4 - Cam 2a
+         * 5 - Cam 4
          * 6 - Door
+         * 7 - Inside Office
          */
 
-        int chance = 0;
-        switch (lastLocation)
+        switch(_lastLocation)
         {
             case 0:
-                newDest = Random.Range(1, 2);
+                newDest = 1;
                 break;
             case 1:
                 chance = Random.Range(1, 10);
-                if (chance < 6)
+                if(chance <= 5)
                 {
                     newDest = 2;
-                } else
+                }
+                else
                 {
                     newDest = 3;
                 }
                 break;
             case 2:
                 chance = Random.Range(1, 10);
-                if (chance < 6)
+                if(chance <= 5)
                 {
                     newDest = 3;
                 }
                 else
                 {
-                    newDest = 1;
+                    newDest = 4;
                 }
                 break;
             case 3:
                 chance = Random.Range(1, 10);
-                if (chance < 6)
+                if(chance <= 5)
                 {
-                    newDest = 4;
+                    newDest = 2;
                 }
                 else
                 {
-                    newDest = 5;
+                    newDest = 4;
                 }
                 break;
             case 4:
                 chance = Random.Range(1, 10);
-                if(chance <= 5)
+                if(chance <= 2)
                 {
-                    newDest = 5;
-                } 
+                    newDest = 1;
+                }
                 else
                 {
-                    newDest = 6;
+                    newDest = 5;
                 }
                 break;
             case 5:
                 chance = Random.Range(1, 10);
-                if (chance < 6)
+                if(chance <= 4)
                 {
-                    newDest = 6;
+                    newDest = 4;
                 }
                 else
                 {
-                    newDest = 4;
-                    print("Bonnie Ready to Attack");
+                    newDest = 6;
+                    print("Chica Ready to Attack");
                 }
                 break;
             case 6:
                 newDest = Attack();
                 break;
             default:
-                print("Invalid");
+                print("INVALID");
                 break;
         }
+
         if (newDest == 0)
             newDest = lastLocation;
 
-        print("Bonnie: Moving to " + newDest);
+        print("Chica: Moving to " + newDest);
         return newDest;
     }
 
     int Attack()
     {
-        return isLeftDoorClosed.value ? 2 : 7;
+        return isRightDoorClosed.value ? 4 : 7;
     }
 
     public void SetMovementPoints(Transform[] _movementPoints)

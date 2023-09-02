@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameControl : MonoBehaviour
 {
-    // --- Map Points ---
-    public Transform[] bonnieMovementPoints;
-
     // --- Power Usage ---
     public IntVariable powerLevel;
     public float lastTimePowerLost = 0;
@@ -23,6 +20,14 @@ public class GameControl : MonoBehaviour
     public GameObject bonniePrefab;
     public BoolVariable bonnieMoving;
 
+    public GameObject chicaPrefab;
+    public BoolVariable chicaMoving;
+
+    // --- Map Points ---
+    public Transform[] bonnieMovementPoints;
+    public Transform[] chicaMovementPoints;
+
+
     void Start()
     {
         powerLevel.value = 100;
@@ -30,6 +35,9 @@ public class GameControl : MonoBehaviour
 
         Instantiate(bonniePrefab);
         bonniePrefab.GetComponent<BonnieAi>().SetMovementPoints(bonnieMovementPoints);
+
+        Instantiate(chicaPrefab);
+        chicaPrefab.GetComponent<ChicaAI>().SetMovementPoints(chicaMovementPoints);
     }
 
     // Update is called once per frame

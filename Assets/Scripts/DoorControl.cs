@@ -12,8 +12,9 @@ public class DoorControl : MonoBehaviour
     public const float Y_OPEN = 3.5f;
 
     public BoolVariable isLeftDoorClosed;
+    public BoolVariable isRightDoorClosed;
     //public bool isLeftDoorClosed = false;
-    public bool isRightDoorClosed = false;
+    //public bool isRightDoorClosed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -34,14 +35,14 @@ public class DoorControl : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Alpha2) && powerLevel.value > 0)
         {
-            isRightDoorClosed = !isRightDoorClosed;
+            isRightDoorClosed.value = !isRightDoorClosed.value;
             print("RIGHT DOOR");
         }
 
         if (isLeftDoorClosed.value) CloseLeftDoor();
         else OpenLeftDoor();
 
-        if (isRightDoorClosed) CloseRightDoor();
+        if (isRightDoorClosed.value) CloseRightDoor();
         else OpenRightDoor();
     }
 
@@ -64,5 +65,6 @@ public class DoorControl : MonoBehaviour
     void OpenRightDoor()
     {
         rightDoor.transform.position = new Vector3(rightDoor.transform.position.x, Y_OPEN, rightDoor.transform.position.z);
+        isRightDoorClosed.value = false;
     }
 }
