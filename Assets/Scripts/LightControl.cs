@@ -17,7 +17,7 @@ public class LightControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetButton("Fire1"))
         {
             isLightOn = true;
         } else
