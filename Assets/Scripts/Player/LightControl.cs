@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightControl : MonoBehaviour
 {
     public Light flashlight;
-
+    public BoolVariable isLookingAtSecurityCam;
     public bool isLightOn;
 
     // Start is called before the first frame update
@@ -17,7 +17,7 @@ public class LightControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButton("Fire1"))
+        if(Input.GetButton("Fire1") && !isLookingAtSecurityCam.value)
         {
             isLightOn = true;
         } else

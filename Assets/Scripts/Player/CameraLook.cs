@@ -10,6 +10,8 @@ public class CameraLook : MonoBehaviour
     public float maxRotation = 25f;
     public float yRotationOffset = -90f;
 
+    public BoolVariable isLookingAtSecurityCam;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,9 @@ public class CameraLook : MonoBehaviour
         yRotation = Mathf.Clamp(yRotation, yRotationOffset + (-maxRotation), yRotationOffset + maxRotation); // Keep the angle restricted.
 
         // Apply rotation
-        transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        if (!isLookingAtSecurityCam.value)
+            transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        else
+            transform.localRotation = Quaternion.Euler(0f, yRotationOffset, 0f);
     }
 }
