@@ -8,6 +8,7 @@ public class BonnieAi : MonoBehaviour
     public IntVariable currentTime;
 
     public Transform body;
+    public string[] movementPointTags = {"8B", "7", "9", "1b", "1a", "3", "LD", "InLeftOffice", "Death"};
     public Transform[] movementPoints;
     //public NavMeshAgent agent;
 
@@ -34,9 +35,10 @@ public class BonnieAi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //agent = GetComponent<NavMeshAgent>();
         body = GetComponent<Transform>();
         currentAILevel = 10;
+
+        SetMovementPoints();
     }
 
     // Update is called once per frame
@@ -195,8 +197,13 @@ public class BonnieAi : MonoBehaviour
         return isLeftDoorClosed.value ? 2 : 7;
     }
 
-    public void SetMovementPoints(Transform[] _movementPoints)
+    public void SetMovementPoints()
     {
-        movementPoints = _movementPoints;
+        Transform[] tempPoints = new Transform[movementPointTags.Length];
+        for(int i = 0; i < movementPointTags.Length; i++)
+        {
+            tempPoints[i] = GameObject.FindGameObjectWithTag(movementPointTags[i]).transform;
+        }
+        movementPoints = tempPoints;
     }
 }

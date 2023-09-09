@@ -24,6 +24,12 @@ TagManager:
   - DF
   - LD
   - RD
+  - InLeftOffice
+  - InRightOffice
+  - 8B
+  - 8C
+  - 8FR
+  - DeathSpot
   layers:
   - Default
   - TransparentFX

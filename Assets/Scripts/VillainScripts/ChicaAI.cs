@@ -8,6 +8,7 @@ public class ChicaAI : MonoBehaviour
     public int lastHourTime = 0;
 
     public Transform body;
+    public string[] movementPointTags = {"8C", "UM", "UB", "6", "2a", "4", "RD", "InRightOffice", "DeathSpot"};
     public Transform[] movementPoints;
 
     public float lastMovementTime = 0;
@@ -27,6 +28,8 @@ public class ChicaAI : MonoBehaviour
     {
         body = GetComponent<Transform>();
         currentAILevel = 10;
+
+        SetMovementPoints();
     }
 
     // Update is called once per frame
@@ -172,8 +175,13 @@ public class ChicaAI : MonoBehaviour
         return isRightDoorClosed.value ? 4 : 7;
     }
 
-    public void SetMovementPoints(Transform[] _movementPoints)
+    public void SetMovementPoints()
     {
-        movementPoints = _movementPoints;
+        Transform[] tempPoints = new Transform[9];
+        for(int i = 0; i < movementPointTags.Length; i++)
+        {
+            tempPoints[i] = GameObject.FindGameObjectWithTag(movementPointTags[i]).transform;
+        }
+        movementPoints = tempPoints;
     }
 }
